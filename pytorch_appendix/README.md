@@ -2,9 +2,11 @@
 
 This section contains the annotated PyTorch appendix notebook for the *Build a Large Language Model from Scratch* study repository. It focuses on the core PyTorch skills needed before implementing tokenizers, attention, transformer blocks, pretraining loops, and fine-tuning workflows.
 
+The notebook has been turned into a teaching notebook: it includes an opening overview, markdown explanations before the code cells, and comments inside the code. The original visible outputs are preserved because they are part of the learning value of the notebook.
+
 ## Why this section matters
 
-Before building an LLM, it is important to be comfortable with the framework mechanics that make the model trainable. A GPT-style language model is built from tensor operations, matrix multiplications, neural network modules, gradients, dataloaders, optimizer steps, and device-aware training. This appendix turns those ideas into small examples that are easy to inspect and debug.
+Before building an LLM, it is important to be comfortable with the framework mechanics that make the model trainable. A GPT-style language model is built from tensor operations, matrix multiplications, neural network modules, gradients, dataloaders, optimizer steps, checkpoints, and device-aware training. This appendix turns those ideas into small examples that are easy to inspect and debug.
 
 ## Files
 
@@ -12,15 +14,13 @@ Before building an LLM, it is important to be comfortable with the framework mec
 pytorch_appendix/
 ├── README.md
 ├── pytorch-appendix.ipynb
-├── pytorch-appendix-annotated.ipynb
 ├── multiple_gpus.py
 └── pytorch_appendix.pth          # generated after running the notebook
 ```
 
 | File | Purpose |
 |---|---|
-| `pytorch-appendix.ipynb` | Drop-in annotated notebook using the original filename. |
-| `pytorch-appendix-annotated.ipynb` | Same annotated notebook with an explicit descriptive filename. |
+| `pytorch-appendix.ipynb` | Main annotated notebook using the original filename. Outputs are preserved. |
 | `multiple_gpus.py` | Script version of the Distributed Data Parallel example, intended to be run from the terminal instead of inside a notebook. |
 | `pytorch_appendix.pth` | Model checkpoint produced when the notebook saves the toy model weights. This file is generated, so it does not need to be committed unless desired. |
 
@@ -42,7 +42,7 @@ The notebook defines a small `torch.nn.Module` with linear layers and ReLU activ
 
 ### 4. Dataset and DataLoader workflow
 
-A small toy classification dataset is wrapped in a custom `Dataset`, then batched with a `DataLoader`. This prepares the pattern that later text datasets will use after tokenization.
+A small toy classification dataset is wrapped in a custom `Dataset`, then batched with a `DataLoader`. This prepares the same pattern that later text datasets will use after tokenization.
 
 ### 5. Training loop
 
@@ -56,15 +56,15 @@ It also includes evaluation mode, `torch.no_grad()`, class prediction, and a reu
 
 ### 6. Saving and loading weights
 
-The model is saved with `state_dict`, which is the recommended PyTorch pattern for storing learned parameters. The notebook then recreates the architecture and loads the saved weights with CPU-safe `map_location` handling.
+The model is saved with `state_dict`, which is the recommended PyTorch pattern for storing learned parameters. The notebook then recreates the architecture and loads the saved weights.
 
 ### 7. CPU/GPU device handling
 
-The CUDA section demonstrates how to check GPU availability, move tensors to the GPU, avoid CPU/GPU mismatch errors, and train a model on the selected device.
+The CUDA section demonstrates how to check GPU availability, move tensors to the GPU, and understand CPU/GPU mismatch errors. One output intentionally shows a device mismatch error, which is useful because it teaches why tensors and models must live on the same device.
 
 ### 8. Distributed Data Parallel overview
 
-The notebook includes commented DDP setup code but keeps the actual launch disabled because process spawning is more reliable from a Python script. Use `multiple_gpus.py` for the script-based version.
+The notebook includes DDP setup code for learning purposes, while `multiple_gpus.py` provides a cleaner script-style version. DDP is usually more reliable from a terminal script than from an interactive notebook.
 
 ## Running the notebook
 
@@ -75,7 +75,9 @@ cd pytorch_appendix
 jupyter lab pytorch-appendix.ipynb
 ```
 
-Run the notebook from top to bottom. The CUDA and benchmarking cells automatically skip GPU-only code when CUDA is not available.
+Run the notebook from top to bottom when you want to reproduce the results. The committed notebook already contains the original outputs, so readers can inspect the results even before running the code locally.
+
+A few GPU cells depend on CUDA. If you run the notebook on a CPU-only machine, those outputs will differ unless you adapt the CUDA-specific cells.
 
 ## Running the multi-GPU script
 
