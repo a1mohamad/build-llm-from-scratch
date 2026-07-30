@@ -41,12 +41,12 @@ After completing this chapter, you should be able to:
 
 | Order | Notebook | Purpose |
 |---:|---|---|
-| 1 | [`final-simple_tokenizer.ipynb`](final-simple_tokenizer.ipynb) | Build a small tokenizer from scratch, observe the out-of-vocabulary failure in Version 1, and add `<\|unk\|>` and `<\|endoftext\|>` handling in Version 2. |
-| 2 | [`final-bpe_tokenizer.ipynb`](final-bpe_tokenizer.ipynb) | Use GPT-2 tokenization with `tiktoken`, create shifted context-target pairs, and package sliding token windows with PyTorch. |
+| 1 | [`simple_tokenizer.ipynb`](simple_tokenizer.ipynb) | Build a small tokenizer from scratch, observe the out-of-vocabulary failure in Version 1, and add `<\|unk\|>` and `<\|endoftext\|>` handling in Version 2. |
+| 2 | [`bpe_tokenizer.ipynb`](bpe_tokenizer.ipynb) | Use GPT-2 tokenization with `tiktoken`, create shifted context-target pairs, and package sliding token windows with PyTorch. |
 | 3 | [`bpe-from-scratch-simple.ipynb`](bpe-from-scratch-simple.ipynb) | Optional deeper study of how BPE learns and applies merge rules. This notebook already contained a detailed educational narrative and was intentionally left unchanged. |
-| 4 | [`final-embedding.ipynb`](final-embedding.ipynb) | Convert batched token IDs into token embeddings, create positional embeddings, and combine both representations. |
+| 4 | [`embedding.ipynb`](embedding.ipynb) | Convert batched token IDs into token embeddings, create positional embeddings, and combine both representations. |
 
-The original notebooks remain beside the annotated copies for comparison and import compatibility.
+The annotated notebooks now use the canonical chapter filenames. Their pre-annotation versions remain recoverable from Git history.
 
 ## Key concepts
 
@@ -92,19 +92,17 @@ chap02/
 ├── README.md
 ├── text-verdict.txt
 ├── simple_tokenizer.ipynb
-├── final-simple_tokenizer.ipynb
 ├── bpe_tokenizer.ipynb
-├── final-bpe_tokenizer.ipynb
 ├── bpe-from-scratch-simple.ipynb
-├── embedding.ipynb
-└── final-embedding.ipynb
+└── embedding.ipynb
 ```
 
 | File | Role |
 |---|---|
 | `text-verdict.txt` | Local chapter corpus downloaded from the official companion repository. |
-| Original notebooks | Unmodified source versions and the import target used by `embedding.ipynb`. |
-| `final-*.ipynb` | Annotated learning versions with all original outputs preserved. |
+| `simple_tokenizer.ipynb` | Annotated simple-tokenizer lesson with the original outputs preserved. |
+| `bpe_tokenizer.ipynb` | Annotated GPT-2 tokenizer and data-loading lesson; also imported by `embedding.ipynb`. |
+| `embedding.ipynb` | Annotated token and positional embedding lesson with the original outputs preserved. |
 | `bpe-from-scratch-simple.ipynb` | Existing standalone BPE tutorial; excluded from the new annotation pass. |
 
 ## Environment
@@ -150,21 +148,21 @@ Open the annotated notebooks in the recommended order and run them from top to b
 
 Important execution notes:
 
-- `final-simple_tokenizer.ipynb` downloads `the-verdict.txt` on its first cell and writes it as `text-verdict.txt`. Internet access is required for that download.
-- `final-bpe_tokenizer.ipynb` reads the local `text-verdict.txt` file.
-- `final-embedding.ipynb` uses `import_ipynb` to import `create_dataloader` and `raw_text` from the original `bpe_tokenizer.ipynb`. Keep both files in the same folder.
+- `simple_tokenizer.ipynb` downloads `the-verdict.txt` on its first cell and writes it as `text-verdict.txt`. Internet access is required for that download.
+- `bpe_tokenizer.ipynb` reads the local `text-verdict.txt` file.
+- `embedding.ipynb` uses `import_ipynb` to import `create_dataloader` and `raw_text` from `bpe_tokenizer.ipynb`. Keep both files in the same folder.
 - Importing a notebook through `import-ipynb` executes its cells as a module. The embedding notebook uses `%%capture` to suppress that import-time output.
 - The embedding data loader uses shuffling, so rerunning it can produce different token batches even though the recorded tensor shapes remain the same.
 
 ## Preserved outputs and known teaching checkpoints
 
-The annotated copies were not re-executed. Their existing outputs remain part of the learning material:
+The annotated notebooks were not re-executed. Their existing outputs remain part of the learning material:
 
 | Notebook | Preserved evidence |
 |---|---|
-| `final-simple_tokenizer.ipynb` | Corpus preview, token counts, vocabulary entries, encoded IDs, decoded text, and the intentional `KeyError: 'Hello'`. |
-| `final-bpe_tokenizer.ipynb` | GPT-2 token IDs, decoded subword pieces, corpus token count, context-target examples, and batched tensors. |
-| `final-embedding.ipynb` | Seeded embedding weights, token batches, and token, position, and combined embedding shapes. |
+| `simple_tokenizer.ipynb` | Corpus preview, token counts, vocabulary entries, encoded IDs, decoded text, and the intentional `KeyError: 'Hello'`. |
+| `bpe_tokenizer.ipynb` | GPT-2 token IDs, decoded subword pieces, corpus token count, context-target examples, and batched tensors. |
+| `embedding.ipynb` | Seeded embedding weights, token batches, and token, position, and combined embedding shapes. |
 | `bpe-from-scratch-simple.ipynb` | BPE training, merge, encoding, decoding, and round-trip demonstrations from the existing tutorial. |
 
 The error in `SimpleTokenizerV1` is intentionally preserved because it demonstrates why unknown-token handling is needed. It is addressed later in the same notebook by `SimpleTokenizerV2`; the stored traceback was not deleted or replaced.
